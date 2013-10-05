@@ -1,15 +1,15 @@
 public class PrintPrimes {
   int numberOfPrimes;
-  int RR;
-  int CC;
+  int numberOfRows;
+  int numberOfColumns;
   int WW;
   int ORDMAX;
   int listOfPrimes[];
 
-  public PrintPrimes(int numberOfPrimes, int RR, int CC, int WW, int ORDMAX) {
+  public PrintPrimes(int numberOfPrimes, int numberOfRows, int numberOfColumns, int WW, int ORDMAX) {
     this.numberOfPrimes   = numberOfPrimes;
-    this.RR  = RR;
-    this.CC  = CC;
+    this.numberOfRows  = numberOfRows;
+    this.numberOfColumns  = numberOfColumns;
     this.WW  = WW;
     this.ORDMAX = ORDMAX;
     this.listOfPrimes = new int[numberOfPrimes + 1];
@@ -63,22 +63,36 @@ public class PrintPrimes {
       }
     }
 
+  
     public void printPrimes() {
-        int PAGENUMBER = 1;
-        int PAGEOFFSET = 1;
-        while (PAGEOFFSET <= numberOfPrimes) {
-          System.out.println("The First " + numberOfPrimes +
-                               " Prime Numbers --- Page " + PAGENUMBER);
+        int pageNumber = 1; // the page number currently at
+        int primeIndex = 1; // the index to commence printing this page at
+        
+        while (primeIndex <= numberOfPrimes) {
+        	//update user
+          System.out.println("The First " + numberOfPrimes + " Prime Numbers --- Page " + pageNumber);
           System.out.println("");
-          for (int ROWOFFSET = PAGEOFFSET; ROWOFFSET < PAGEOFFSET + RR; ROWOFFSET++){
-            for (int C = 0; C < CC;C++)
-              if (ROWOFFSET + C * RR <= numberOfPrimes)
-                System.out.format("%10d", listOfPrimes[ROWOFFSET + C * RR]);
-            System.out.println("");
+          
+          //print each prime number column by column.
+          for (int row = primeIndex; row <= primeIndex + numberOfRows; row++) { // starting at row 1, print every row in page.
+        	  for (int column = 0; column < numberOfColumns; column++) { //print every column in page
+        		  
+        		  /* Since only one row can be printed a time, the next value to be printed must be predicted
+    			   * However, it must be verified this index actually exists
+    			   */
+        		  if (row + column * numberOfRows <= numberOfPrimes) { // check if index exists, if so print it
+        			  int indexToPrint = row + column * numberOfRows;
+        			  int primeToPrint = listOfPrimes[indexToPrint];
+        			  //%10 formats the output into neat columns which spaces cannot do
+        			  System.out.format("%10d", primeToPrint); 
+        		  }
+        	  }
+        	  System.out.println(""); // skip a line, to be pretty.
           }
-          System.out.println("\f");
-          PAGENUMBER = PAGENUMBER + 1;
-          PAGEOFFSET = PAGEOFFSET + RR * CC;
+          System.out.println(""); // skip a line, to be pretty.
+          primeIndex = primeIndex + numberOfRows * numberOfColumns; 
+          pageNumber = pageNumber + 1; // next page
+                 
         }
     }
 }
