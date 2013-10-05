@@ -33,33 +33,38 @@ public class PrintPrimes {
   }
 
   private void calculateOddPrimes() {
-      boolean JPRIME;
+      boolean isNotPrime;
       int N;
       int MULT[] = new int[ORDMAX + 1];
 
-      int J = 1;
-      int ORD = 2;
-      int SQUARE = 9;
+      int numToCheck = 1; // the number were checking
+      int indexOfNum = 2; // the index of the number were checking.
+      int numToCheckSquared = 9; // first square possible is 3, since 2 is already a prime number
 
       for(int primesFoundSoFar = 1; primesFoundSoFar <= numberOfPrimes; primesFoundSoFar++) {
         do {
-          J = J + 2;
-          if (J == SQUARE) {
-            ORD = ORD + 1;
-            SQUARE = listOfPrimes[ORD] * listOfPrimes[ORD];
-            MULT[ORD - 1] = J;
+          numToCheck = numToCheck + 2;
+          /* If the number were checking equals the square of the last non-prime number, 
+           * Then the number were checking is definitely not prime.
+           * Go to the next number to check.
+           */
+          if (numToCheck == numToCheckSquared) { 
+            indexOfNum = indexOfNum + 1; //go to next number
+            numToCheckSquared = listOfPrimes[indexOfNum] * listOfPrimes[indexOfNum];
+            MULT[indexOfNum - 1] = numToCheck;
           }
+          
           N = 2;
-          JPRIME = true;
-          while (N < ORD && JPRIME) {
-            while (MULT[N] < J)
+          isNotPrime = true;
+          while (N < indexOfNum && isNotPrime) {
+            while (MULT[N] < numToCheck)
               MULT[N] = MULT[N] + listOfPrimes[N] + listOfPrimes[N];
-            if (MULT[N] == J)
-              JPRIME = false;
+            if (MULT[N] == numToCheck)
+              isNotPrime = false;
             N = N + 1;
           }
-        } while (!JPRIME);
-        listOfPrimes[primesFoundSoFar] = J;
+        } while (!isNotPrime);
+        listOfPrimes[primesFoundSoFar] = numToCheck;
       }
     }
 
