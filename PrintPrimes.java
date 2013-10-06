@@ -84,11 +84,11 @@ public class PrintPrimes {
 
 	public void printPrimes() {
 		int pageNumber = 1; // the page number currently at
-		int rowIndex = 1; // the index to commence printing this page at
+		int startRow = 1; // the index to commence printing this page at
 
-		while (checkIfMorePagesToPrint(rowIndex)) {
-			printThisPage(pageNumber, rowIndex);
-			rowIndex = rowIndex + numberOfRows * numberOfColumns;
+		while (checkIfMorePagesToPrint(startRow)) {
+			printThisPage(pageNumber, startRow);
+			startRow = startRow + numberOfRows * numberOfColumns;
 			pageNumber = pageNumber + 1; // next page
 		}
 	}
@@ -97,7 +97,7 @@ public class PrintPrimes {
 		return primeIndex <= numberOfPrimes;
 	}
 
-	private void printThisPage(int pageNumber, int rowIndex) {
+	private void printThisPage(int pageNumber, int startRow) {
 		// update user
 		System.out.println("The First " + numberOfPrimes
 				+ " Prime Numbers --- Page " + pageNumber);
@@ -105,8 +105,8 @@ public class PrintPrimes {
 
 		// print each prime number column by column.
 		// starting at row 1, print every row in page.
-		int endRow = rowIndex + numberOfRows;
-		for (int row = rowIndex; row <= endRow; row++) {
+		int endRow = startRow + numberOfRows;
+		for (int row = startRow; row <= endRow; row++) {
 			// print every column in page
 			for (int column = 0; column < numberOfColumns; column++) {
 				printThisPrime(row, column);
