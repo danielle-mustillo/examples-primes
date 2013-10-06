@@ -82,6 +82,11 @@ public class PrintPrimes {
 		}
 	}
 
+	/**
+	 * Prints out the primes that have already been found. Prints it in a row by
+	 * column format defined when the user instantiates the PrintPrimes object.
+	 * 
+	 */
 	public void printPrimes() {
 		int pageNumber = 1; // the page number currently at
 		int startRow = 1; // the index to commence printing this page at
@@ -93,10 +98,22 @@ public class PrintPrimes {
 		}
 	}
 
+	/**
+	 * This function returns if another page must be printed
+	 * 
+	 * @param primeIndex
+	 * @return True if another page must be printed, false if not.
+	 */
 	private boolean checkIfMorePagesToPrint(int primeIndex) {
 		return primeIndex <= numberOfPrimes;
 	}
 
+	/**
+	 * This function prints the current page, in a pretty column format.
+	 * 
+	 * @param pageNumber
+	 * @param startRow
+	 */
 	private void printThisPage(int pageNumber, int startRow) {
 		// update user
 		System.out.println("The First " + numberOfPrimes
@@ -104,24 +121,30 @@ public class PrintPrimes {
 		System.out.println("");
 
 		// print each prime number column by column.
-		// starting at row 1, print every row in page.
-		int endRow = startRow + numberOfRows;
+		int endRow = startRow + numberOfRows; // last row to print
 		for (int row = startRow; row <= endRow; row++) {
 			// print every column in page
 			for (int column = 0; column < numberOfColumns; column++) {
 				printThisPrime(row, column);
 			}
-			System.out.println(""); // skip a line, to be pretty.
+			System.out.println(""); // next row
 		}
 		System.out.println(""); // skip a line, to be pretty.
 	}
 
+	/**
+	 * Prints the current prime number, ignores the prime numbers in the index
+	 * that doesn't make sense (indexes that do not exist).
+	 * 
+	 * @param row
+	 * @param column
+	 */
 	private void printThisPrime(int row, int column) {
 
 		/*
-		 * Since only one row can be printed a time, the next value to
-		 * be printed must be predicted However, it must be verified
-		 * this index actually exists
+		 * Since only one row can be printed a time, the next value to be
+		 * printed must be predicted However, it must be verified this index
+		 * actually exists
 		 */
 		// check if index exists, if so print it
 		if (row + column * numberOfRows <= numberOfPrimes) {
