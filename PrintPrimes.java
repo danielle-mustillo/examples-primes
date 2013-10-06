@@ -1,7 +1,7 @@
 public class PrintPrimes {
 	int numberOfPrimes; // the total number of primes to be found
 	int numberOfRows; // the number of rows to be printed per page
-	int numberOfColumns; //
+	int numberOfColumns; // the number of columns to print.
 	int maxMultipleOfPrimesIndex;
 	int listOfPrimes[];
 
@@ -120,7 +120,7 @@ public class PrintPrimes {
 				+ " Prime Numbers --- Page " + pageNumber);
 		System.out.println("");
 
-		// print each prime number column by column.
+		// print each prime number row by row
 		int endRow = startRow + numberOfRows; // last row to print
 		for (int row = startRow; row <= endRow; row++) {
 			// print every column in page
@@ -140,19 +140,18 @@ public class PrintPrimes {
 	 * @param column
 	 */
 	private void printThisPrime(int row, int column) {
-
-		/*
-		 * Since only one row can be printed a time, the next value to be
+		/* Since only one row can be printed a time, the next value to be
 		 * printed must be predicted However, it must be verified this index
-		 * actually exists
+		 * actually exists. This does both.
 		 */
-		// check if index exists, if so print it
-		if (row + column * numberOfRows <= numberOfPrimes) {
+		int indexToCheck = row + column * numberOfRows;
+		// only print if the index to print has actually been calculated.
+		if (indexToCheck <= numberOfPrimes) {
 			int indexToPrint = row + column * numberOfRows;
-			int primeToPrint = listOfPrimes[indexToPrint];
+			int numberToPrint = listOfPrimes[indexToPrint];
 			// %10 formats the output into neat columns which spaces
 			// cannot do
-			System.out.format("%10d", primeToPrint);
+			System.out.format("%10d", numberToPrint);
 		}
 	}
 }
