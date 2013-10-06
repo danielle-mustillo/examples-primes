@@ -1,23 +1,22 @@
 public class PrintPrimes {
-  int numberOfPrimes;
-  int numberOfRows;
-  int numberOfColumns;
-  int WW;
-  int ORDMAX;
+  int numberOfPrimes; // the total number of primes to be found
+  int numberOfRows; // the number of rows to be printed per page
+  int numberOfColumns; // 
+  int maxMultipleOfPrimesIndex;
   int listOfPrimes[];
 
-  public PrintPrimes(int numberOfPrimes, int numberOfRows, int numberOfColumns, int WW, int ORDMAX) {
+  //constructor
+  public PrintPrimes(int numberOfPrimes, int numberOfRows, int numberOfColumns, int ORDMAX) {
     this.numberOfPrimes   = numberOfPrimes;
     this.numberOfRows  = numberOfRows;
     this.numberOfColumns  = numberOfColumns;
-    this.WW  = WW;
-    this.ORDMAX = ORDMAX;
+    this.maxMultipleOfPrimesIndex = ORDMAX;
     this.listOfPrimes = new int[numberOfPrimes + 1];
   }
 
 
   public static void main(String[] args) {
-      PrintPrimes printPrimes = new PrintPrimes(300, 50, 4, 10, 30);
+      PrintPrimes printPrimes = new PrintPrimes(300, 50, 4, 30);
       printPrimes.calculatePrimes();
       printPrimes.printPrimes();
   }
@@ -33,37 +32,45 @@ public class PrintPrimes {
   }
 
   private void calculateOddPrimes() {
-      boolean isNotPrime;
-      int N;
-      int MULT[] = new int[ORDMAX + 1];
+      boolean isPrime;
+      int tempIndex;
+      int multipleOfPrimes[] = new int[maxMultipleOfPrimesIndex + 1];
 
       int numToCheck = 1; // the number were checking
-      int indexOfNum = 2; // the index of the number were checking.
-      int numToCheckSquared = 9; // first square possible is 3, since 2 is already a prime number
+      int indexToFill = 2; // the index of the place were trying to fill
+      int lastPrimeSquared = 9; // first square possible is 3, since 2 is already a prime number
 
-      for(int primesFoundSoFar = 1; primesFoundSoFar <= numberOfPrimes; primesFoundSoFar++) {
+      for(int primesFoundSoFar = 2; primesFoundSoFar <= numberOfPrimes; primesFoundSoFar++) {
         do {
-          numToCheck = numToCheck + 2;
+          numToCheck = numToCheck + 2; // prime numbers are only ever odd, so add 2 to the next check
           /* If the number were checking equals the square of the last non-prime number, 
            * Then the number were checking is definitely not prime.
            * Go to the next number to check.
            */
-          if (numToCheck == numToCheckSquared) { 
-            indexOfNum = indexOfNum + 1; //go to next number
-            numToCheckSquared = listOfPrimes[indexOfNum] * listOfPrimes[indexOfNum];
-            MULT[indexOfNum - 1] = numToCheck;
+          if (numToCheck == lastPrimeSquared) { 
+            indexToFill = indexToFill + 1; //go to next number
+            lastPrimeSquared = listOfPrimes[indexToFill] * listOfPrimes[indexToFill];
+            multipleOfPrimes[indexToFill - 1] = numToCheck;
           }
           
-          N = 2;
-          isNotPrime = true;
-          while (N < indexOfNum && isNotPrime) {
-            while (MULT[N] < numToCheck)
-              MULT[N] = MULT[N] + listOfPrimes[N] + listOfPrimes[N];
-            if (MULT[N] == numToCheck)
-              isNotPrime = false;
-            N = N + 1;
+          tempIndex = 2;
+          isPrime = true;
+          /* Checks if the number were looking at is prime or not
+           * 
+           */
+          while (tempIndex < indexToFill && isPrime) {
+        	  /* This will take lastPrimeSquared and add to it twice the multiple of the current Prime
+        	   * This produces a non-prime number
+        	   * If the number were looking at is
+        	   */
+        	while (multipleOfPrimes[tempIndex] < numToCheck) {
+              multipleOfPrimes[tempIndex] = multipleOfPrimes[tempIndex] + listOfPrimes[tempIndex] + listOfPrimes[tempIndex];
+            }
+            if (multipleOfPrimes[tempIndex] == numToCheck)
+              isPrime = false;
+            tempIndex = tempIndex + 1;
           }
-        } while (!isNotPrime);
+        } while (!isPrime);
         listOfPrimes[primesFoundSoFar] = numToCheck;
       }
     }
