@@ -1,26 +1,35 @@
 public class PrintPrimes {
-	int numberOfPrimes; // the total number of primes to be found
+	// calculation variables
+	int numberOfPrimes; // the number of primes to find
+	int listOfPrimes[]; // the primes are stored here
+	int maxMultipleOfPrimesIndex; // used to calculate primes, should be fairly large.
+	
+	//output format
 	int numberOfRows; // the number of rows to be printed per page
 	int numberOfColumns; // the number of columns to print.
-	int maxMultipleOfPrimesIndex;
-	int listOfPrimes[];
 
 	// constructor
 	public PrintPrimes(int numberOfPrimes, int numberOfRows,
-			int numberOfColumns, int ORDMAX) {
+			int numberOfColumns) {
+		// user defined input
 		this.numberOfPrimes = numberOfPrimes;
 		this.numberOfRows = numberOfRows;
 		this.numberOfColumns = numberOfColumns;
-		this.maxMultipleOfPrimesIndex = ORDMAX;
+		// nitty gritty details (hidden)
+		this.maxMultipleOfPrimesIndex = numberOfPrimes / 10; 
 		this.listOfPrimes = new int[numberOfPrimes + 1];
 	}
 
 	public static void main(String[] args) {
-		PrintPrimes printPrimes = new PrintPrimes(300, 50, 4, 30);
+		PrintPrimes printPrimes = new PrintPrimes(300, 50, 4);
 		printPrimes.calculatePrimes();
 		printPrimes.printPrimes();
 	}
 
+	/**Calculates all the first number of prime numbers the user specified in numberOfPrimes.
+	 * This function only does one thing (adds 2) and then calls another function to do the rest of the work.
+	 * The function puts the calculated values in the class Array listOfPrimes.
+	 */
 	public void calculatePrimes() {
 		/*
 		 * Two is the only even prime. All other prime numbers are odd. To
@@ -31,6 +40,12 @@ public class PrintPrimes {
 		calculateOddPrimes();
 	}
 
+	/**Calcualtes all the odd prime numbers upto the value the user specified. Does this in a two step fashion:
+	 * While only considering odd numbers, it checks if the prime number is equal to the previous primes square.
+	 * If so, its not a prime number.
+	 * Subsequently, it compares multiples of the current prime and the square of the previous one with the current prime number.
+	 * If they are equal, it is certainly a prime number.
+	 */
 	private void calculateOddPrimes() {
 		boolean isPrime;
 		int tempIndex;
