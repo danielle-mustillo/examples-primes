@@ -2,21 +2,21 @@ public class PrintPrimes {
 	// calculation variables
 	int numberOfPrimes; // the number of primes to find
 	int listOfPrimes[]; // the primes are stored here
-	int maxMultipleOfPrimesIndex; // used to calculate primes, should be fairly large.
-	
-	//output format
+	int maxMultipleOfPrimesIndex; // used to calculate primes, should be fairly
+									// large. Depends on input.
+
+	// output format
 	int numberOfRows; // the number of rows to be printed per page
 	int numberOfColumns; // the number of columns to print.
 
 	// constructor
-	public PrintPrimes(int numberOfPrimes, int numberOfRows,
-			int numberOfColumns) {
+	public PrintPrimes(int numberOfPrimes, int numberOfRows, int numberOfColumns) {
 		// user defined input
 		this.numberOfPrimes = numberOfPrimes;
 		this.numberOfRows = numberOfRows;
 		this.numberOfColumns = numberOfColumns;
 		// nitty gritty details (hidden)
-		this.maxMultipleOfPrimesIndex = numberOfPrimes / 10; 
+		this.maxMultipleOfPrimesIndex = numberOfPrimes / 10;
 		this.listOfPrimes = new int[numberOfPrimes + 1];
 	}
 
@@ -26,9 +26,11 @@ public class PrintPrimes {
 		printPrimes.printPrimes();
 	}
 
-	/**Calculates all the first number of prime numbers the user specified in numberOfPrimes.
-	 * This function only does one thing (adds 2) and then calls another function to do the rest of the work.
-	 * The function puts the calculated values in the class Array listOfPrimes.
+	/**
+	 * Calculates all the first number of prime numbers the user specified in
+	 * numberOfPrimes. This function only does one thing (adds 2) and then calls
+	 * another function to do the rest of the work. The function puts the
+	 * calculated values in the class Array listOfPrimes.
 	 */
 	public void calculatePrimes() {
 		/*
@@ -40,15 +42,19 @@ public class PrintPrimes {
 		calculateOddPrimes();
 	}
 
-	/**Calcualtes all the odd prime numbers upto the value the user specified. Does this in a two step fashion:
-	 * While only considering odd numbers, it checks if the prime number is equal to the previous primes square.
-	 * If so, its not a prime number.
-	 * Subsequently, it compares multiples of the current prime and the square of the previous one with the current prime number.
-	 * If they are equal, it is certainly a prime number.
+	/**
+	 * Calculates all the odd prime numbers up to the value the user specified.
+	 * Does this in a two step fashion: While only considering odd numbers, it
+	 * checks if the prime number is equal to the previous primes square. If so,
+	 * its not a prime number. Subsequently, it compares multiples of the
+	 * current prime and the square of the previous one with the current prime
+	 * number. If they are equal, it is certainly a prime number.
 	 */
 	private void calculateOddPrimes() {
-		boolean isPrime;
+		boolean isPrime; // contains whether the value is prime or not.
 		int tempIndex;
+		// this contains multiples of prime numbers, therefore non prime
+		// numbers.
 		int multipleOfPrimes[] = new int[maxMultipleOfPrimesIndex + 1];
 
 		int numToCheck = 1; // the number were checking
@@ -57,16 +63,21 @@ public class PrintPrimes {
 									// already a prime number
 
 		for (int primesFoundSoFar = 2; primesFoundSoFar <= numberOfPrimes; primesFoundSoFar++) {
-			do {
-				// prime numbers are only ever odd, so add 2 to the next check
+			do { // until we found a prime number
+
+				// all remaining primes are odd, so add 2 to the next check
 				numToCheck = numToCheck + 2;
+
 				/*
 				 * If the number were checking equals the square of the last
-				 * non-prime number, Then the number were checking is definitely
-				 * not prime. Go to the next number to check.
+				 * non-prime number, then the number were checking is definitely
+				 * not prime. Add this squared number to the list of
+				 * multiplesOfPrime, which contain multiples of prime numbers
+				 * that are certainly not prime numbers themselves.
 				 */
 				if (numToCheck == lastPrimeSquared) {
-					indexToFill = indexToFill + 1; // go to next number
+					indexToFill = indexToFill + 1; // go to next multiple to
+													// fill
 					lastPrimeSquared = listOfPrimes[indexToFill]
 							* listOfPrimes[indexToFill];
 					multipleOfPrimes[indexToFill - 1] = numToCheck;
@@ -75,24 +86,38 @@ public class PrintPrimes {
 				tempIndex = 2;
 				isPrime = true;
 				/*
-				 * Checks if the number were looking at is prime or not
+				 * Here we check Checks every multipleOfPrime number found for
+				 * the number were looking at, if that number is found, it is
+				 * certainly not a prime number. This works on the basis that
+				 * the square of a prime numbers can only ever be
 				 */
 				while (tempIndex < indexToFill && isPrime) {
-					/*
-					 * This will take lastPrimeSquared and add to it twice the
-					 * multiple of the current Prime This produces a non-prime
-					 * number If the number were looking at is
-					 */
 					while (multipleOfPrimes[tempIndex] < numToCheck) {
+						/*
+						 * We only add even multiplies of the prime number to
+						 * its square because the odd multiples are always even
+						 * numbers So for example: 25 + 5 or 15 (5*1 or 5*3) is
+						 * always even. This holds for all prime numbers as odd
+						 * * odd = even always by mathematics. However, even *
+						 * odd = odd always for the same reason. Therefore the
+						 * smallest even number (which is a multiple of every
+						 * other even number) is 2.
+						 */
 						multipleOfPrimes[tempIndex] = multipleOfPrimes[tempIndex]
-								+ listOfPrimes[tempIndex]
-								+ listOfPrimes[tempIndex];
+								+ listOfPrimes[tempIndex] * 2;
 					}
+					/*
+					 * if the current value were checking is equal to any of the
+					 * multiplesOfPrime calculated before then it is definitely
+					 * not prime.
+					 */
 					if (multipleOfPrimes[tempIndex] == numToCheck)
 						isPrime = false;
+					// check all indexes of multiple of prime for this.
 					tempIndex = tempIndex + 1;
 				}
 			} while (!isPrime);
+			// add this number to list of prime numbers found.
 			listOfPrimes[primesFoundSoFar] = numToCheck;
 		}
 	}
@@ -155,7 +180,8 @@ public class PrintPrimes {
 	 * @param column
 	 */
 	private void printThisPrime(int row, int column) {
-		/* Since only one row can be printed a time, the next value to be
+		/*
+		 * Since only one row can be printed a time, the next value to be
 		 * printed must be predicted However, it must be verified this index
 		 * actually exists. This does both.
 		 */
